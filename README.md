@@ -263,3 +263,122 @@ Có 3 giai đoạn chính:
 
   export default ExampleComponent;
   ```
+
+### Props trong React là gì?
+
+> Trong **ReactJS**, _props_ (viết tắt của "properties") là một cách để truyền dữ liệu từ _component_ cha xuống _component_ con. _Props_ được sử dụng để truyền các giá trị tùy chỉnh, thuộc tính và hành vi từ một _component_ cha cho một _component_ con.
+
+Ví dụ:
+
+```js
+// component cha
+import React from 'react';
+import Greeting from './Greeting';
+
+class App extends React.Component {
+  render() {
+    return (
+      <div>
+        <Greeting
+          name='John'
+          message='Welcome to React!'
+        />
+      </div>
+    );
+  }
+}
+
+export default App;
+```
+
+Trong ví dụ trên, component **App** sử dụng component **Greeting** và truyền các giá trị _props_ là `name="John"` và `message="Welcome to React!"`. Khi component **Greeting** được render trong component **App**
+
+```js
+// component con
+import React from 'react';
+
+class Greeting extends React.Component {
+  render() {
+    return (
+      <div>
+        <h1>Hello, {this.props.name}!</h1>
+        <p>{this.props.message}</p>
+      </div>
+    );
+  }
+}
+
+export default Greeting;
+```
+
+Ở ví dụ trên, component _Greeting_ nhận hai _props_ là `name` và `message`. Trong phần `render`, giá trị của _props_ được truyền vào được sử dụng bằng cách sử dụng cú pháp `{this.props.name}` và `{this.props.message}`
+
+### Vậy sự khác nhau giữa state và props là gì?
+
+Trong ReactJS, có sự khác nhau quan trọng giữa props (properties) và state (trạng thái):
+
+- Props (properties):
+
+  1. Props là dữ liệu được truyền từ component cha xuống component con.
+
+  1. Props là chỉ đọc (read-only), tức là không thể thay đổi giá trị của props trong component con.
+
+  1. Props được truyền vào component thông qua thuộc tính trong JSX khi tạo instance của component.
+
+  1. Props được sử dụng để truyền các giá trị tùy chỉnh, thuộc tính và hành vi từ component cha cho component con.
+  1. Props không thay đổi trong suốt vòng đời của component, nghĩa là giá trị props không thay đổi sau khi được truyền vào.
+
+- State (trạng thái):
+
+  1. State là dữ liệu nội bộ của một component.
+
+  1. State có thể thay đổi trong component, và khi state thay đổi, component sẽ được render lại để phản ánh các thay đổi đó.
+  1. State được khởi tạo trong constructor của component và được quản lý bởi React.
+
+  1. State có thể được cập nhật bằng cách sử dụng phương thức setState().
+
+  1. Thay đổi state sẽ gây ra việc re-render lại component và các component con của nó (nếu cần).
+
+  1. State thường được sử dụng để lưu trữ và quản lý các dữ liệu và trạng thái nội bộ trong một component.
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>Props</th>
+      <th>State</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Nguồn dữ liệu</th>
+      <td>Truyền từ component cha xuống component con</td>
+      <td>Dữ liệu nội bộ của component</td>
+    </tr>
+    <tr>
+      <th>Thay đổi giá trị</th>
+      <td>Không thể thay đổi giá trị props trong component con</td>
+      <td>Có thể thay đổi giá trị state trong component</td>
+    </tr>
+    <tr>
+      <th>Được truyền qua</th>
+      <td>Dùng thuộc tính trong JSX khi tạo instance</td>
+      <td>Được khởi tạo trong constructor và quản lý bởi React</td>
+    </tr>
+    <tr>
+      <th>Cập nhật giá trị</th>
+      <td>Không thể cập nhật trực tiếp props</td>
+      <td>Cập nhật bằng phương thức <code>setState()</code></td>
+    </tr>
+    <tr>
+      <th>Gây ra re-render</th>
+      <td>Thay đổi props gây re-render component</td>
+      <td>Thay đổi state gây re-render component</td>
+    </tr>
+    <tr>
+      <th>Sử dụng chính</th>
+      <td>Truyền dữ liệu và hành vi từ component cha</td>
+      <td>Quản lý dữ liệu và trạng thái nội bộ của component</td>
+    </tr>
+  </tbody>
+</table>
