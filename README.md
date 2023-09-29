@@ -382,3 +382,65 @@ Trong ReactJS, có sự khác nhau quan trọng giữa props (properties) và st
     </tr>
   </tbody>
 </table>
+
+## JSX là gì?
+
+> **JSX (JavaScript XML)** là một phần mở rộng cú pháp của `JavaScript` cho phép bạn viết các đoạn mã tương tự `HTML` trong các thành phần `React`. Nó là một phần không thể thiếu trong quá trình phát triển ứng dụng `React`, giúp tạo ra các thành phần UI động và dễ đọc, định nghĩa _props_ và truyền dữ liệu giữa các thành phần một cách dễ dàng.
+
+Ví dụ:
+
+```js
+import React from 'react';
+
+class MyComponent extends React.Component {
+  render() {
+    return (
+      <div>
+        <h1>Hello, World!</h1>
+        <p>This is a JSX component.</p>
+      </div>
+    );
+  }
+}
+
+export default MyComponent;
+```
+
+**Vậy nếu trước đây chưa có JSX thì sẽ code như nào?**
+
+Chúng ta sẽ sử dụng các phương thức của React để tạo và điều khiển các thành phần.
+
+Ví dụ:
+
+```js
+import React from 'react';
+
+class MyComponent extends React.Component {
+  render() {
+    return React.createElement(
+      'div',
+      null, // chỗ này dùng để truyền props
+      React.createElement('h1', null, 'Hello, World!'),
+      React.createElement('p', null, 'This is a React component.')
+    );
+  }
+}
+
+export default MyComponent;
+```
+
+**So sánh việc sử dụng React thuần và việc sử dụng JSX:**
+
+- **Cú pháp:** JSX cho phép bạn viết mã tương tự HTML trong các thành phần React, trong khi khi sử dụng React thuần, bạn phải sử dụng các phương thức như React.createElement() để tạo thành phần. JSX giúp mã nguồn trở nên _dễ đọc hơn_ và _giảm độ phức tạp_ so với việc tạo thành phần bằng React thuần.
+
+- **Hiệu suất:** JSX và React thuần đều có hiệu suất tương tự vì khi mã JSX được biên dịch, nó sẽ được chuyển đổi thành các cuộc gọi hàm React tương ứng. Do đó, không có sự khác biệt đáng kể về hiệu suất giữa hai phương pháp này. Tuy nhiên, vì phải biên dịch sang lại code, nên JSX vẫn chậm hơn React thuần.
+
+- **Sự linh hoạt:** JSX cho phép bạn tận dụng các tính năng của JavaScript trong các thành phần React, bao gồm việc sử dụng biểu thức JavaScript, các hàm, và các phương thức. Bằng cách này, JSX cho phép bạn tạo ra mã động và linh hoạt hơn. Trong khi đó, khi sử dụng React thuần, bạn phải sử dụng các phương thức của React để tạo và điều khiển các thành phần, điều này có thể đòi hỏi một số công việc bổ sung để đạt được cùng một mục đích.
+
+**File.js và File.jsx khác nhau như nào?**
+
+- Một JS tập tin là một phần mở rộng tập tin JavaScript, điều này được sử dụng cho bất kỳ mô-đun và đoạn mã thực hiện trong tinh khiết JavaScript. Bạn nên sử dụng tệp JS khi viết các hàm sẽ không sử dụng bất kỳ tính năng React nào nhưng sẽ được sử dụng giữa các thành phần React khác nhau.
+
+- JSX là một phần mở rộng cú pháp tệp được sử dụng bởi React, bạn có thể kết xuất thành phần, nhập tệp CSS và sử dụng các móc React trong số những thứ khác. Bạn nên sử dụng tệp JSX khi hiển thị một thành phần React.
+
+> Sử dụng cú pháp JSX trong một tệp tin JavaScript (.js), React vẫn có thể chạy được mã nguồn của bạn nếu bạn đã cấu hình môi trường phù hợp. Tuy nhiên, mặc dù React có thể chạy mã JSX trong tệp tin JavaScript thông thường, việc sử dụng phần mở rộng tệp tin .jsx được khuyến nghị để làm rõ rằng tệp tin đó chứa mã nguồn sử dụng cú pháp JSX. Việc sử dụng phần mở rộng .jsx giúp cho việc đọc, hiểu và duy trì mã nguồn dễ dàng hơn, đặc biệt khi bạn có nhiều tệp tin trong dự án React của mình.
