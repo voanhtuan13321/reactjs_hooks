@@ -15,6 +15,8 @@
    - [useReducer hook](#usereducer-hook)
    - [useEffect hook](#useeffect-hook)
    - [useContext hook](#usecontext-hook)
+     - [context provider là gì?](#context-provider-là-gì)
+   - [useRef hook](#useref-hook)
 
 ## Hooks là gì?
 
@@ -1013,3 +1015,15 @@ function ChildComponent() {
 - Tái sử dụng logic và dữ liệu: Khi bạn muốn tái sử dụng logic và dữ liệu chia sẻ trong các component khác nhau, useContext là một cách tiện lợi để truy cập dữ liệu từ context mà không cần phải viết lại mã logic.
 
 - Quản lý trạng thái ứng dụng đơn giản: Khi trạng thái ứng dụng không quá phức tạp và không đòi hỏi các logic xử lý phức tạp, useContext có thể là một cách đơn giản và tiện lợi để quản lý trạng thái và cung cấp dữ liệu cho các component con.
+
+##### Context Provider là gì?
+
+> Context Provider là một thành phần trong `React` được cung cấp bởi API Context của `React`. Nó có nhiệm vụ cung cấp dữ liệu cho các thành phần con trong cây _component_ thông qua _Context_.
+>
+> Khi bạn tạo một Context bằng cách sử dụng createContext() trong React, bạn cũng sẽ nhận được một Context Provider tương ứng. Context Provider là một thành phần React được sử dụng để bao bọc các thành phần con mà bạn muốn chia sẻ dữ liệu với.
+>
+> Context Provider cung cấp một prop gọi là value, trong đó bạn có thể đặt giá trị dữ liệu mà bạn muốn chia sẻ với các thành phần con. Khi giá trị này thay đổi, React sẽ tự động cập nhật lại các thành phần con bên trong Provider.
+>
+> Lưu ý: Khi tạo context thì sẽ cung cấp một provider riêng của mỗi context. Không thể dử dụng provider của context này để lấy value của context khác.
+
+#### useRef hook?
