@@ -509,3 +509,331 @@ Một số đặc điểm nổi bật trong Function component:
     </tr>
   </tbody>
 </table>
+
+### Hooks trong React?
+
+Dưới đây là một số hooks phổ biến trong React:
+
+1. **useState**: Hook này cho phép bạn sử dụng _state_ trong _function component_. Bằng cách sử dụng **useState**, bạn có thể khai báo và cập nhật giá trị của biến state.
+
+1. **useReducer**: Hook này cho phép bạn quản lý state bằng cách sử dụng một `reducer function`. Bằng cách sử dụng **useReducer**, bạn có thể thay thế **useState** trong trường hợp có logic phức tạp hơn để cập nhật state.
+
+1. **useEffect**: Hook này cho phép bạn thực hiện side effects (hiệu ứng phụ) trong _function component_. Bằng cách sử dụng **useEffect**, bạn có thể thực hiện các tác vụ như gọi API, đăng ký sự kiện, hoặc thay đổi DOM khi component được render hoặc cập nhật.
+
+1. **useContext**: Hook này cho phép bạn truy cập vào Context trong _function component_. Bằng cách sử dụng **useContext**, bạn có thể truy cập các giá trị được chia sẻ trong toàn bộ ứng dụng thông qua **Context Provider**.
+
+1. **useRef**: Hook này cho phép bạn tạo một _ref_ hoặc lưu trữ giá trị trong _function component_. Bằng cách sử dụng **useRef**, bạn có thể tham chiếu đến các phần tử DOM hoặc giá trị khác trong component.
+
+1. **useCallback**: Hook này cho phép bạn memoize (ghi nhớ) một hàm trong _function component_. Bằng cách sử dụng **useCallback**, bạn có thể tạo lại hàm chỉ khi các _dependency_ thay đổi, giúp tối ưu hiệu năng.
+
+1. **useMemo**: Hook này cho phép bạn memoize một giá trị tính toán trong _function component_. Bằng cách sử dụng **useMemo**, bạn có thể tạo lại giá trị chỉ khi các _dependency_ thay đổi, giúp tối ưu hiệu năng.
+
+1. **custom hooks**: Là một hàm JavaScript bắt đầu bằng từ khóa _"use"_ và sử dụng các hooks khác (có thể là hooks có sẵn hoặc custom hooks khác) trong nội dung của nó.
+
+#### useState hook?
+
+> Là một hook cho phép bạn sử dụng state trong function component.
+
+Cú pháp sử dụng: `const [state, setState] = useState(initial);`
+
+```js
+import React, { useState } from 'react'; // import hook
+
+function MyComponent() {
+  const [count, setCount] = useState(0); // use hook
+
+  return (
+    <div>
+      <p>Count: {count}</p>
+      <button onClick={() => setCount(count + 1)}>Increment</button>
+    </div>
+  );
+}
+
+export default MyComponent;
+```
+
+Trong ví dụ trên, chúng ta sử dụng useState để tạo một state count và một hàm setCount để cập nhật giá trị của state đó. Ban đầu, giá trị khởi tạo của count là 0.
+
+Dưới đây là đoạn code tương tự nhưng khi code bằng _Class components_:
+
+```js
+import React, { Component } from 'react';
+
+class MyComponent extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      count: 0,
+    };
+  }
+
+  incrementCount() {
+    this.setState({ count: this.state.count + 1 });
+  }
+
+  render() {
+    return (
+      <div>
+        <p>Count: {this.state.count}</p>
+        <button onClick={() => this.incrementCount()}>Increment</button>
+      </div>
+    );
+  }
+}
+
+export default MyComponent;
+```
+
+> Khi hàm set trong useState được gọi, quá trình re-render của `React` sẽ chạy.
+
+> Nếu gán giá trị trực tiếp vào biến state mà không sử dụng hàm set để cập nhật giá trị, `React` sẽ không nhận biết được sự thay đổi và không thể trigger lại quá trình render. Điều này có nghĩa là giao diện người dùng sẽ không được cập nhật và không hiển thị giá trị mới của state.
+
+#### useReducer hook?
+
+> Là một hook cho phép bạn quản lý state của một _component_ sử dụng cơ chế reducer, tương tự như trong _Redux_. Nó cung cấp một cách linh hoạt hơn để xử lý các trạng thái phức tạp và các hành động liên quan đến state.
+>
+> **useReducer** nhận vào hai tham số: _reducer function_ và giá trị khởi tạo của _state_. _Reducer function_ là một hàm nhận vào hai tham số: _state_ hiện tại và action, và trả về _state_ mới. Nó xác định cách _state_ sẽ thay đổi dựa trên _action_ được gửi vào.
+
+Cú pháp sử dụng: `const [state, dispatch] = useReducer(reducer_function, initial);`
+
+```js
+import React, { useReducer } from 'react'; // import hook
+
+// create reducer function
+function reducer(state, action) {
+  switch (action.type) {
+    case 'INCREMENT':
+      return { count: state.count + 1 };
+    case 'DECREMENT':
+      return { count: state.count - 1 };
+    default:
+      return state;
+  }
+}
+
+function MyComponent() {
+  const [state, dispatch] = useReducer(reducer, { count: 0 }); // use hook
+
+  return (
+    <div>
+      <p>Count: {state.count}</p>
+      <button onClick={() => dispatch({ type: 'INCREMENT' })}>Increment</button>
+      <button onClick={() => dispatch({ type: 'DECREMENT' })}>Decrement</button>
+    </div>
+  );
+}
+
+export default MyComponent;
+```
+
+Dưới đây là đoạn code tương tự nhưng khi code bằng _Class components_:
+
+```js
+import React, { Component } from 'react';
+
+class MyComponent extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      count: 0,
+    };
+  }
+
+  increment() {
+    this.setState({ count: this.state.count + 1 });
+  }
+
+  decrement() {
+    this.setState({ count: this.state.count - 1 });
+  }
+
+  render() {
+    return (
+      <div>
+        <p>Count: {this.state.count}</p>
+        <button onClick={() => this.increment()}>Increment</button>
+        <button onClick={() => this.decrement()}>Decrement</button>
+      </div>
+    );
+  }
+}
+
+export default MyComponent;
+```
+
+![Alt text](/images/image1.png)
+
+> Khi gọi hàm _dispatch_ trong **useReducer**, một _action_ được gửi đến _reducer function_ để xử lý. _Reducer function_ nhận _action_ và _state_ hiện tại làm đầu vào và trả về _state_ mới.
+>
+> Khi _dispatch_ được gọi, `React` sẽ gọi _reducer function_ và truyền _action_ và _state_ hiện tại vào. _Reducer function_ sẽ kiểm tra _action_ và dựa vào loại _action_ để xác định cách thay đổi _state_. Sau đó, nó trả về _state_ mới.
+>
+> Sau khi _reducer function_ trả về _state_ mới, `React` sẽ so sánh _state_ mới với _state_ hiện tại. Nếu _state_ mới khác _state_ hiện tại, `React` sẽ cập nhật _state_ và kích hoạt lại quá trình render. Các _component_ sử dụng _state_ sẽ được render lại với _state_ mới và giao diện người dùng sẽ được cập nhật.
+
+> Nếu bạn gán trực tiếp giá trị mới vào biến _state_ mà không sử dụng hàm _dispatch_, thì Reducer không sẽ nhận biết được sự thay đổi và không thể trigger lại quá trình _render_. Điều này có nghĩa là giao diện người dùng sẽ không được cập nhật và không hiển thị giá trị mới của _state_.
+
+#### useEffect hook?
+
+> Là một trong những hooks quan trọng nhất và được sử dụng rộng rãi. Nó cho phép bạn thực hiện các side effect trong các _component functional_. Side effect có thể là các tác vụ như gọi API, đăng ký và hủy đăng ký các sự kiện, thao tác với DOM, và nhiều tác vụ khác.
+>
+> **useEffect** được sử dụng để thay thế các lifecycle methods trong các component class như `componentDidMount()`, `componentDidUpdate()`, và `componentWillUnmount()`.
+
+Một số cách sử dụng useEffect:
+
+1.  _useEffect không có dependencies_: Khi không cung cấp dependencies, useEffect sẽ gọi lại sau mỗi lần render, bao gồm cả render đầu tiên.
+
+    ```js
+    useEffect(() => {
+      // Mã thực thi sau mỗi lần render
+    });
+    ```
+
+1.  _useEffect với dependencies rỗng_: Khi dependencies được truyền vào là một mảng rỗng [], useEffect chỉ gọi một lần sau khi component được render lần đầu tiên (tương đương với `componentDidMount()` trong class component).
+
+    ```js
+    useEffect(() => {
+      // Mã thực thi chỉ gọi một lần
+    }, []);
+    ```
+
+    Ví dụ function component:
+
+    ```js
+    import React, { useEffect } from 'react'; // import hook
+
+    function MyComponent() {
+      // use hook
+      useEffect(() => {
+        // Mã thực thi chỉ gọi một lần
+        console.log('Component did mount');
+      }, []);
+
+      return (
+        <div>
+          <h1>Hello, World!</h1>
+        </div>
+      );
+    }
+
+    export default MyComponent;
+    ```
+
+    Ví dụ class component:
+
+    ```js
+    import React from 'react';
+
+    class MyComponent extends React.Component {
+      componentDidMount() {
+        // Mã thực thi chỉ gọi một lần
+        console.log('Component did mount');
+      }
+
+      render() {
+        return (
+          <div>
+            <h1>Hello, World!</h1>
+          </div>
+        );
+      }
+    }
+
+    export default MyComponent;
+    ```
+
+1.  _useEffect với dependencies_: Khi dependencies được cung cấp, useEffect sẽ gọi lại khi một hoặc nhiều dependencies thay đổi. Điều này thường được sử dụng để theo dõi và xử lý các thay đổi trong các biến hoặc props.
+
+    ```js
+    useEffect(() => {
+      // Mã thực thi khi dependencies thay đổi
+    }, [dependency1, dependency2]);
+    ```
+
+    Ví dụ:
+
+    ```js
+    import React, { useState, useEffect } from 'react'; // import hook
+
+    function MyComponent() {
+      const [count, setCount] = useState(0);
+
+      // use hook
+      useEffect(() => {
+        // Mã thực thi khi giá trị của count thay đổi
+        console.log('Count changed:', count);
+      }, [count]);
+
+      const increment = () => {
+        setCount((prevCount) => prevCount + 1);
+      };
+
+      return (
+        <div>
+          <h1>Count: {count}</h1>
+          <button onClick={increment}>Increment</button>
+        </div>
+      );
+    }
+    ```
+
+1.  _useEffect trả về một hàm cleanup_: Bạn có thể trả về một hàm từ useEffect để thực hiện các tác vụ dọn dẹp hoặc hủy bỏ các tài nguyên đã được tạo trong useEffect. Hàm cleanup sẽ được gọi trước khi component bị unmount hoặc trước khi useEffect gọi lại (tương đương với `componentWillUnmount()` trong class component)
+
+    ```js
+    useEffect(() => {
+      // Mã thực thi
+
+      return () => {
+        // Mã dọn dẹp hoặc hủy bỏ tài nguyên
+      };
+    }, []);
+    ```
+
+    Ví dụ function component:
+
+    ```js
+    import React, { useEffect } from 'react';
+
+    function MyComponent() {
+      useEffect(() => {
+        // Mã thực thi khi component được mount
+        console.log('Component did mount');
+
+        return () => {
+          // Mã thực thi khi component bị unmount (cleanup)
+          console.log('Component will unmount');
+        };
+      }, []);
+
+      return (
+        <div>
+          <h1>Hello, World!</h1>
+        </div>
+      );
+    }
+    ```
+
+    Ví dụ class component:
+
+    ```js
+    import React from 'react';
+
+    class MyComponent extends React.Component {
+      componentDidMount() {
+        // Mã thực thi khi component được mount
+        console.log('Component did mount');
+      }
+
+      componentWillUnmount() {
+        // Mã thực thi khi component bị unmount (cleanup)
+        console.log('Component will unmount');
+      }
+
+      render() {
+        return (
+          <div>
+            <h1>Hello, World!</h1>
+          </div>
+        );
+      }
+    }
+    ```
