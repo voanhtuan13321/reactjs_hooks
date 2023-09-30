@@ -17,6 +17,7 @@
    - [useContext hook](#usecontext-hook)
      - [context provider là gì?](#context-provider-là-gì)
    - [useRef hook](#useref-hook)
+   - [useCallback hook](#usecallback-hook)
 
 ## Hooks là gì?
 
@@ -1027,3 +1028,154 @@ function ChildComponent() {
 > Lưu ý: Khi tạo context thì sẽ cung cấp một provider riêng của mỗi context. Không thể dử dụng provider của context này để lấy value của context khác.
 
 #### useRef hook?
+
+> **useRef** được sử dụng để tạo một tham chiếu (reference) không bị ảnh hưởng bởi việc tái _render_ của _component_. Nó cung cấp một cách để truy cập và thay đổi các phần tử `DOM` hoặc _giá trị_ khác trong _component_ mà không gây ra việc _render_ lại _component_ đó.
+>
+> Khi bạn sử dụng **useRef**, bạn có thể tạo một biến tham chiếu và gán nó cho một phần tử `DOM` hoặc một giá trị bất kỳ. Biến tham chiếu này sẽ duy trì giá trị của nó qua các lần _render_ và không làm cho _component_ được _render_ lại khi giá trị tham chiếu thay đổi.
+
+Cú pháp:
+
+```js
+const refContainer = useRef(initialValue);
+```
+
+Ví dụ:
+
+- Lưu giá trị:
+
+  ```js
+  import React, { useRef } from 'react';
+
+  const Counter = () => {
+    const counterRef = useRef(0);
+
+    const increment = () => {
+      counterRef.current += 1;
+    };
+
+    return (
+      <div>
+        <p>Count: {count}</p>
+        <button onClick={increment}>Increment</button>
+      </div>
+    );
+  };
+  ```
+
+- Lưu tham chiếu đến phần tử DOM:
+
+  ```js
+  import React, { useRef } from 'react';
+
+  const TextInput = () => {
+    const inputRef = useRef(null);
+
+    const focusInput = () => {
+      inputRef.current.focus();
+    };
+
+    const clearInput = () => {
+      inputRef.current.value = '';
+    };
+
+    return (
+      <div>
+        <input
+          ref={inputRef}
+          type='text'
+        />
+        <button onClick={focusInput}>Focus Input</button>
+        <button onClick={clearInput}>Clear Input</button>
+      </div>
+    );
+  };
+  ```
+
+**Ưu điểm:**
+
+- Lưu trữ giá trị và tham chiếu không gây render lại: useRef cho phép lưu trữ giá trị và tham chiếu mà không gây ra việc render lại component. Giá trị của useRef có thể thay đổi mà không làm cho component được render lại.
+
+- Truy cập phần tử DOM và các thuộc tính của nó: Bằng cách gán useRef cho thuộc tính ref của phần tử DOM, bạn có thể truy cập và thao tác với phần tử DOM một cách dễ dàng, chẳng hạn như đặt trỏ chuột vào một ô input hoặc thay đổi giá trị của nó.
+
+- Dữ liệu tồn tại qua các lần render: Giá trị của useRef tồn tại qua các lần render của component. Điều này hữu ích khi bạn muốn lưu trữ dữ liệu mà không bị ảnh hưởng bởi việc render lại component, chẳng hạn như lưu trữ trạng thái tạm thời hoặc dữ liệu không thay đổi.
+
+**Nhược điểm:**
+
+- Không gây render lại component khi giá trị thay đổi: Một nhược điểm của useRef là nó không gây render lại component khi giá trị thay đổi.
+
+- Không kích hoạt việc tái render khi giá trị thay đổi: useRef không kích hoạt việc tái render của component khi giá trị thay đổi. Điều này có thể làm mất đi tính tự động của React khi cập nhật giao diện người dùng dựa trên giá trị thay đổi.
+
+**Khi nào nên sử dụng:**
+
+- Lưu trữ tham chiếu đến phần tử DOM: Khi bạn cần truy cập và thao tác với phần tử DOM, bạn có thể sử dụng useRef để lưu trữ tham chiếu đến nó và thực hiện các thao tác như đặt trỏ chuột, thay đổi thuộc tính, hoặc gọi phương thức trên phần tử DOM.
+
+- Lưu trữ dữ liệu không gây render lại component: Khi bạn cần lưu trữ dữ liệu mà không muốn gây ra việc render lại component, bạn có thể sử dụng useRef. Ví dụ, lưu trữ các biến đếm, trạng thái tạm thời, hoặc dữ liệu không thay đổi.
+
+**useRef khác useState như thế nào?**
+
+1. Mục đích sử dụng:
+
+   - useRef: useRef được sử dụng để lưu trữ và duy trì giá trị trong suốt quá trình render và tái render của component. Nó không gây ra việc render lại component khi giá trị thay đổi và không kích hoạt việc tái render. useRef thường được sử dụng để lưu trữ các tham chiếu đến phần tử DOM hoặc lưu trữ dữ liệu không gây ra việc render lại component.
+
+   - useState: useState được sử dụng để lưu trữ và quản lý trạng thái của component. Khi giá trị thay đổi bằng cách gọi hàm setState, React sẽ tái render component và cập nhật giao diện người dùng. useState thường được sử dụng để lưu trữ các trạng thái của component và gây ra việc tái render khi trạng thái thay đổi.
+
+1. Cách sử dụng:
+
+   - useRef: Để sử dụng useRef, bạn khai báo một biến ref bằng cách gọi useRef(initialValue). Giá trị ban đầu của initialValue chỉ được thiết lập một lần trong quá trình render và không gây ra việc tái render khi thay đổi. Bạn có thể truy cập và thay đổi giá trị hiện tại của ref.current mà không gây ra việc tái render.
+
+   - useState: Để sử dụng useState, bạn khai báo một biến state và một hàm setter tương ứng bằng cách gọi useState(initialValue). Giá trị ban đầu của initialValue được sử dụng trong quá trình render đầu tiên và sau đó được cập nhật bằng cách gọi hàm setter. Khi hàm setter được gọi, React sẽ tái render component và cập nhật giao diện người dùng dựa trên giá trị mới.
+
+1. Tái render và cập nhật giao diện:
+
+   - useRef: Thay đổi giá trị của ref.current không gây ra việc tái render component và không cập nhật giao diện người dùng tự động. Bạn cần sử dụng các hook khác như useState hoặc useEffect để trigger việc tái render khi giá trị của ref.current thay đổi.
+
+   - useState: Khi giá trị state thay đổi bằng cách gọi hàm setter, React sẽ tái render component và cập nhật giao diện người dùng dựa trên giá trị mới của state.
+
+1. Ví dụ sử dụng:
+
+   - useRef ví dụ: Sử dụng useRef để lưu trữ tham chiếu đến một phần tử DOM và thay đổi thuộc tính của nó mà không gây ra việc tái render:
+
+     ```js
+     import React, { useRef } from 'react';
+
+     function ExampleComponent() {
+       const inputRef = useRef(null);
+
+       const focusInput = () => {
+         inputRef.current.focus();
+       };
+
+       return (
+         <div>
+           <input
+             ref={inputRef}
+             type='text'
+           />
+           <button onClick={focusInput}>Focus input</button>
+         </div>
+       );
+     }
+     ```
+
+   - useState ví dụ: Sử dụng useState để lưu trữ và cập nhật trạng thái của một component:
+
+     ```js
+     import React, { useState } from 'react';
+
+     function ExampleComponent() {
+       const [count, setCount] = useState(0);
+
+       const incrementCount = () => {
+         setCount(count + 1);
+       };
+
+       return (
+         <div>
+           <p>Count: {count}</p>
+           <button onClick={incrementCount}>Increment</button>
+         </div>
+       );
+     }
+     ```
+
+#### useCallback hook?
