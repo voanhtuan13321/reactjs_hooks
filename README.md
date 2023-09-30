@@ -1,5 +1,21 @@
 # Nhóm 1: Tìm hiểu về Hooks và những thành phần có liên quan
 
+## Nội dung chính:
+
+1. [Hooks là gì?](#hooks-là-gì)
+1. [Class components là gì?](#vậy-class-components-là-gì)
+   - [State trong class component](#state-trong-class-components)
+   - [LifeCycle class component](#vậy-lifecycle-trong-react-là-gì)
+   - [Props là gì?](#props-trong-react-là-gì)
+   - [Sự khác nhau giữa State và Props](#vậy-sự-khác-nhau-giữa-state-và-props-là-gì)
+   - [JSX là gì?](#jsx-là-gì)
+1. [Function components là gì?](#vậy-function-components-là-gì)
+1. [Hooks trong React?](#hooks-trong-react)
+   - [useState hook](#usestate-hook)
+   - [useReducer hook](#usereducer-hook)
+   - [useEffect hook](#useeffect-hook)
+   - [useContext hook](#usecontext-hook)
+
 ## Hooks là gì?
 
 > _Hooks_ là một tập hợp các `function` đặc biệt cho phép bạn sử dụng các tính năng của `React` trong các _functional components_ (từ phiên bản `React` 16.8) thay vì chỉ sử dụng các thành phần dựa _class components_.
@@ -589,6 +605,34 @@ export default MyComponent;
 
 > Nếu gán giá trị trực tiếp vào biến state mà không sử dụng hàm set để cập nhật giá trị, `React` sẽ không nhận biết được sự thay đổi và không thể trigger lại quá trình render. Điều này có nghĩa là giao diện người dùng sẽ không được cập nhật và không hiển thị giá trị mới của state.
 
+**Ưu điểm:**
+
+- Dễ sử dụng: useState là một hook đơn giản và dễ hiểu.
+
+- Tích hợp trong React: useState là một phần của React và được cung cấp sẵn. Không cần cài đặt thêm gì.
+
+- Tính linh hoạt: useState cho phép bạn lưu trữ và cập nhật các giá trị state bất kỳ kiểu dữ liệu nào, bao gồm cả các đối tượng và mảng.
+
+- Tự động gộp các cập nhật: Khi bạn cập nhật một giá trị state bằng useState, React sẽ tự động gộp các cập nhật liên tiếp vào một lần render, giúp tối ưu hiệu suất.
+
+**Nhược điểm:**
+
+- Khó khăn trong quản lý state phức tạp: Khi ứng dụng có nhiều state hoặc state có quan hệ phức tạp, việc quản lý và cập nhật chúng chỉ bằng useState có thể trở nên khó khăn và dễ gây lẫn lộn.
+
+- Không hỗ trợ tách biệt logic: useState chỉ lưu trữ và cập nhật trạng thái cục bộ của một component. Nếu bạn cần chia sẻ trạng thái giữa các component hoặc xử lý logic phức tạp, useState không cung cấp cách tiếp cận tốt.
+
+**Khi nào nên sử dụng useState:**
+
+> useState nên được sử dụng trong các trường hợp đơn giản và khi bạn chỉ cần quản lý một số lượng nhỏ các trạng thái cục bộ trong một component. Đây là một số trường hợp phổ biến khi nên sử dụng useState:
+
+- Quản lý trạng thái UI như toggle, đếm, hiển thị/collapse, v.v.
+
+- Lưu trữ giá trị của các input form.
+
+- Quản lý trạng thái của các component đơn giản không có nhiều logic phức tạp.
+
+- Lưu trữ các giá trị tạm thời trong quá trình thực hiện một tác vụ như tải dữ liệu từ API.
+
 #### useReducer hook?
 
 > Là một hook cho phép bạn quản lý state của một _component_ sử dụng cơ chế reducer, tương tự như trong _Redux_. Nó cung cấp một cách linh hoạt hơn để xử lý các trạng thái phức tạp và các hành động liên quan đến state.
@@ -671,6 +715,24 @@ export default MyComponent;
 > Sau khi _reducer function_ trả về _state_ mới, `React` sẽ so sánh _state_ mới với _state_ hiện tại. Nếu _state_ mới khác _state_ hiện tại, `React` sẽ cập nhật _state_ và kích hoạt lại quá trình render. Các _component_ sử dụng _state_ sẽ được render lại với _state_ mới và giao diện người dùng sẽ được cập nhật.
 
 > Nếu bạn gán trực tiếp giá trị mới vào biến _state_ mà không sử dụng hàm _dispatch_, thì Reducer không sẽ nhận biết được sự thay đổi và không thể trigger lại quá trình _render_. Điều này có nghĩa là giao diện người dùng sẽ không được cập nhật và không hiển thị giá trị mới của _state_.
+
+**Ưu điểm:**
+
+- Quản lý trạng thái phức tạp hơn: useReducer cho phép bạn quản lý trạng thái phức tạp hơn so với useState. Bạn có thể xử lý logic phức tạp và tách biệt các trạng thái thành các phần riêng biệt.
+
+- Tách biệt logic và trạng thái: useReducer cho phép bạn tách biệt logic xử lý và trạng thái. Bạn có thể định nghĩa reducer function để xử lý các hành động và cập nhật trạng thái dựa trên các hành động đó.
+
+- Tiện lợi trong quản lý trạng thái phức tạp: Khi ứng dụng có nhiều trạng thái phức tạp và các hành động có liên kết với nhau, useReducer giúp quản lý trạng thái một cách dễ dàng và tránh lỗi phức tạp trong việc cập nhật trạng thái.
+
+**Nhược điểm:**
+
+- Cú pháp phức tạp hơn: useReducer có cú pháp và cách sử dụng phức tạp hơn so với useState. Bạn cần định nghĩa reducer function và quy ước hành động (action convention) riêng.
+
+**Khi nào sử dụng:**
+
+- Quản lý trạng thái phức tạp: Khi trạng thái của bạn có cấu trúc phức tạp, các trạng thái có quan hệ và logic xử lý phức tạp, useReducer giúp quản lý và cập nhật trạng thái một cách dễ dàng và rõ ràng hơn.
+
+- Tách biệt logic xử lý và trạng thái: Khi bạn muốn tách biệt logic xử lý và trạng thái, useReducer giúp bạn định nghĩa reducer function để xử lý các hành động và cập nhật trạng thái dựa trên các hành động đó.
 
 #### useEffect hook?
 
@@ -837,3 +899,117 @@ Một số cách sử dụng useEffect:
       }
     }
     ```
+
+**Ưu điểm:**
+
+- Quản lý tác động phụ: useEffect cho phép bạn quản lý các tác động phụ (side effects) trong functional components. Bạn có thể thực hiện các hành động như gọi API, thay đổi DOM, đăng ký và hủy đăng ký sự kiện, v.v.
+
+- Linh hoạt và tiện lợi: useEffect được sử dụng rộng rãi và cung cấp một cách tiện lợi để thực hiện các tác động phụ. Bạn có thể định nghĩa hiệu ứng phụ trong một hàm callback và kích hoạt nó dựa trên các điều kiện và sự thay đổi của các giá trị dependencies.
+
+- Giảm sự phức tạp của lifecycle: useEffect giúp giảm sự phức tạp của lifecycle trong React. Bạn có thể gom nhóm các tác động phụ liên quan vào một cú pháp duy nhất và không cần phải quan tâm đến việc đặt mã trong các lifecycle method riêng biệt.
+
+**Nhược điểm:**
+
+- Khả năng gây hiệu năng kém: Nếu không được sử dụng đúng cách, useEffect có thể gây ra các tác động phụ không cần thiết và làm giảm hiệu suất của ứng dụng. Việc sử dụng quá nhiều useEffect hoặc không quản lý dependencies một cách chính xác có thể dẫn đến việc thực hiện lại các tác động phụ không cần thiết.
+
+- Khó khăn trong việc quản lý dependencies: useEffect yêu cầu bạn chỉ định các giá trị dependencies để xác định khi nào hiệu ứng phụ nên được kích hoạt lại. Điều này có thể trở nên phức tạp khi có nhiều dependencies hoặc dependencies có quan hệ phức tạp.
+
+**Khi nào nên sử dụng:**
+
+- Thực hiện các tác động phụ: Khi bạn cần thực hiện các tác động phụ như gọi API, thay đổi DOM, đăng ký sự kiện, v.v., useEffect là công cụ phổ biến và phù hợp.
+
+- Quản lý lifecycle: Khi bạn muốn quản lý các mốc thời gian và tuần tự của lifecycle trong React, useEffect giúp bạn gom nhóm các tác động phụ liên quan và giảm sự phức tạp của lifecycle methods.
+
+- Điều kiện hoặc dependencies thay đổi: Khi bạn muốn kích hoạt hiệu ứng phụ dựa trên sự thay đổi của các giá trị dependencies như props hoặc state, useEffect cho phép bạn định nghĩa điều kiện và tái kích hoạt hiệu ứng phụ khi cần thiết.
+
+- Tương tác với các thư viện và API bên ngoài: Khi bạn cần tương tác với các thư viện hoặc API bên ngoài như React, như Redux, Axios, hoặc thực hiện các tác vụ bất đồng bộ, useEffect là một công cụ hữu ích để quản lý tác động phụ và tích hợp chúng vào component của bạn.
+
+#### useContext hook?
+
+> Là một hook được cung cấp bởi `React` để truy cập vào giá trị của một _Context_. _Context_ là một cơ chế trong `React` cho phép truyền dữ liệu xuống các _component_ con mà không cần thông qua các _component_ trung gian.
+>
+> **useContext** cho phép bạn truy cập vào giá trị của một _Context_ bên trong một _functional_ _component_. Nó nhận một _Context_ object (tạo bởi `React.createContext`) và trả về giá trị hiện tại của _Context_ đó.
+
+![Alt text](/images/image2.png)
+
+Để sử dụng Context, bạn phải thực hiện các bước sau:
+
+1. Tạo một Context bằng cách sử dụng `React.createContext`:
+
+   ```js
+   const MyContext = React.createContext();
+   ```
+
+1. Đặt giá trị mặc định cho Context bằng cách sử dụng `MyContext.Provider`:
+
+   ```js
+   <MyContext.Provider value={initialValue}>
+     {/* Các component con */}
+     {/* Các component con */}
+   </MyContext.Provider>
+   ```
+
+1. Trong _functional component_, sử dụng _useContext_ để truy cập giá trị của _Context_:
+
+   ```js
+   const value = useContext(MyContext);
+   ```
+
+Ví dụ:
+
+```js
+import React, { useContext } from 'react';
+
+// create context
+const MyContext = React.createContext();
+
+// component cha
+function ParentComponent() {
+  return (
+    // Provider bao bọc những component muốn sử dụng context
+    <MyContext.Provider value='Hello, World!'>
+      <ChildComponent />
+    </MyContext.Provider>
+  );
+}
+
+// component con
+function ChildComponent() {
+  const value = useContext(MyContext); // lấy value bên trong context
+
+  return (
+    <div>
+      <h1>{value}</h1>
+    </div>
+  );
+  // kết quả hiển thị: Hello, World
+}
+```
+
+**Ưu điểm:**
+
+- Chia sẻ dữ liệu dễ dàng: useContext cung cấp một cách dễ dàng để chia sẻ dữ liệu giữa các component con trong cây component mà không cần truyền props qua nhiều cấp.
+
+- Giảm bớt cấu trúc cây component: Bằng cách sử dụng useContext, bạn có thể tránh việc truyền props qua nhiều component con trung gian, giúp giảm bớt cấu trúc cây component và làm cho mã nguồn dễ đọc hơn.
+
+- Tiết kiệm thời gian viết code: Sử dụng useContext giúp bạn truy cập trực tiếp vào dữ liệu chia sẻ mà không cần phải viết các hàm truyền dữ liệu qua props.
+
+- Linh hoạt và tái sử dụng: useContext cho phép bạn tái sử dụng logic và dữ liệu chia sẻ trong các component khác nhau mà không cần phải viết lại mã logic.
+
+**Nhược điểm:**
+
+- Giới hạn sử dụng cho các cây component sâu: Khi cây component trở nên quá sâu và các component con cần truy cập vào dữ liệu chia sẻ, việc sử dụng useContext có thể làm cho việc theo dõi và quản lý dữ liệu trở nên khó khăn.
+
+- Khó tái cấu trúc: Khi sử dụng useContext, việc tái cấu trúc và di chuyển component trong cây component có thể trở nên phức tạp hơn, vì các component có thể phụ thuộc vào dữ liệu chia sẻ thông qua context.
+
+- Khả năng gây rối và khó debug: Khi sử dụng useContext để chia sẻ dữ liệu, việc theo dõi và debug các thay đổi dữ liệu và cập nhật trong cây component có thể trở nên phức tạp hơn so với truyền props truyền thống.
+
+**Khi nào sử dụng:**
+
+- Chia sẻ dữ liệu chung: Khi bạn cần chia sẻ dữ liệu giữa các component con trong cây component, như dữ liệu đăng nhập, theme, ngôn ngữ, useContext là một giải pháp tiện lợi.
+
+- Tránh truyền props qua nhiều cấp: Khi cây component phức tạp và việc truyền props qua nhiều cấp trở nên rườm rà, useContext giúp giảm bớt sự phức tạp và làm cho mã nguồn dễ đọc hơn.
+
+- Tái sử dụng logic và dữ liệu: Khi bạn muốn tái sử dụng logic và dữ liệu chia sẻ trong các component khác nhau, useContext là một cách tiện lợi để truy cập dữ liệu từ context mà không cần phải viết lại mã logic.
+
+- Quản lý trạng thái ứng dụng đơn giản: Khi trạng thái ứng dụng không quá phức tạp và không đòi hỏi các logic xử lý phức tạp, useContext có thể là một cách đơn giản và tiện lợi để quản lý trạng thái và cung cấp dữ liệu cho các component con.
