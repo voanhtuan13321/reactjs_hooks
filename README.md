@@ -1179,3 +1179,117 @@ Ví dụ:
      ```
 
 #### useCallback hook?
+
+> useCallback là một hook trong React được sử dụng để tối ưu hóa hiệu suất của các component bằng cách memoize (lưu trữ) các hàm callback. Khi sử dụng useCallback, một phiên bản memoized của hàm callback được tạo ra và chỉ được thay đổi khi các dependencies (phụ thuộc) của nó thay đổi.
+>
+> Khi một component tái render, các hàm callback bên trong nó cũng được tạo lại, ngay cả khi các dependencies của chúng không thay đổi. Điều này có thể dẫn đến việc tạo ra các hàm callback mới mỗi lần component render lại, gây tốn tài nguyên và làm giảm hiệu suất.
+>
+> Tuy nhiên, bằng cách sử dụng useCallback, bạn có thể chỉ định các dependencies của hàm callback. Khi các dependencies không thay đổi, phiên bản memoized của hàm callback sẽ được sử dụng lại từ lần tái render trước đó, thay vì tạo ra một hàm callback mới. Điều này giúp giảm số lượng hàm callback được tạo ra và giúp cải thiện hiệu suất của component.
+
+Cú pháp sử dụng useCallback như sau:
+
+```js
+const memoizedCallback = useCallback(callback, dependencies);
+```
+
+Trong đó:
+
+- callback: Hàm callback mà bạn muốn memoize.
+
+- dependencies: Một mảng các dependencies (phụ thuộc) mà hàm callback phụ thuộc vào. Khi một trong các dependencies thay đổi, hàm callback sẽ được tạo lại (hoạt động giống dependency của useEffect).
+
+Ví dụ:
+
+```js
+import React, { useState, useCallback } from 'react';
+
+function ExampleComponent() {
+  const [count, setCount] = useState(0);
+
+  const handleClick = useCallback(() => {
+    console.log('Button clicked!');
+    setCount(count + 1);
+  }, []); // dependency là mảng rỗng
+
+  return (
+    <div>
+      <p>Count: {count}</p>
+      <button onClick={handleClick}>Increment</button>
+    </div>
+  );
+}
+
+// output
+Count: 0
+Button clicked!
+Count: 0
+Button clicked!
+Count: 0
+Button clicked!
+Count: 0
+...
+
+// giải thích:
+/*
+Khi bạn click vào nút "Increment", hàm callback handleClick được gọi và in ra thông báo "Button clicked!" trong console. Tuy nhiên, giá trị count không thay đổi và luôn giữ nguyên giá trị 0.
+
+Điều này xảy ra vì khi sử dụng dependency array rỗng ([]), hàm callback chỉ được tạo một lần duy nhất khi component được render lần đầu tiên. Do đó, việc gọi setCount(count + 1) không cập nhật giá trị count trong hàm callback, và giá trị count trong component vẫn giữ nguyên giá trị 0.
+*/
+```
+
+Ví dụ:
+
+```js
+import React, { useState, useCallback } from 'react';
+
+function ExampleComponent() {
+  const [count, setCount] = useState(0);
+
+  const handleClick = useCallback(() => {
+    console.log('Button clicked!');
+    setCount(count + 1);
+  }, [count]); // dependency là mảng rỗng
+
+  return (
+    <div>
+      <p>Count: {count}</p>
+      <button onClick={handleClick}>Increment</button>
+    </div>
+  );
+}
+
+// output
+Count: 0
+Button clicked!
+Count: 1
+Button clicked!
+Count: 2
+Button clicked!
+Count: 3
+...
+
+// giải thích:
+/*
+Khi bạn click vào nút, hàm callback handleClick được gọi và in ra thông báo "Button clicked!" trong console. Đồng thời, giá trị count cũng được cập nhật và tăng lên 1 mỗi lần click.
+
+Khi count thay đổi, hàm callback được tái tạo với giá trị count mới. Việc này đảm bảo rằng count được cập nhật mỗi khi bạn click vào nút "Increment", và giá trị count trong component được hiển thị đúng.
+*/
+```
+
+**Ưu điểm:**
+
+- Tránh render không cần thiết: Khi sử dụng useCallback với các dependency phù hợp, bạn có thể tránh render không cần thiết của các callback. Các hàm callback chỉ được tạo lại khi các dependency thay đổi, giúp tránh các render không cần thiết và tối ưu lại chỉ các phần cần được cập nhật.
+
+- Tối ưu hiệu suất: useCallback giúp tối ưu hiệu suất của các component bằng cách memoize (lưu trữ) các hàm callback. Điều này giúp giảm số lượng hàm callback được tạo ra mỗi lần tái render và cải thiện hiệu suất tổng thể của ứng dụng.
+
+**Nhược điểm:**
+
+- Sử dụng bộ nhớ bổ sung: Việc memoize các hàm callback bằng useCallback sẽ sử dụng bộ nhớ bổ sung để lưu trữ các phiên bản memoized của hàm. Điều này tuy không ảnh hưởng nhiều đến hiệu suất tổng thể của ứng dụng, nhưng có thể tăng sự sử dụng bộ nhớ.
+
+- Cần xác định đúng các dependency: Để sử dụng useCallback hiệu quả, bạn cần xác định đúng các dependency mà hàm callback phụ thuộc vào. Nếu bạn không xác định các dependency đúng cách, có thể dẫn đến việc hàm callback không được gọi lại khi cần thiết hoặc tái render không đúng.
+
+**Khi nào sử dụng:**
+
+- Sử dụng useCallback khi bạn cần truyền một hàm callback vào các component con hoặc hooks khác. useCallback đảm bảo rằng các hàm callback không thay đổi khi không cần thiết, giúp tránh việc tái render không cần thiết của các component con.
+
+- Sử dụng useCallback khi bạn muốn tối ưu hiệu suất của các component bằng cách memoize các hàm callback. Điều này đặc biệt hữu ích khi các hàm callback được sử dụng trong các kịch bản tái render nhiều lần.
