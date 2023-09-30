@@ -4,7 +4,7 @@
 
 > _Hooks_ là một tập hợp các `function` đặc biệt cho phép bạn sử dụng các tính năng của `React` trong các _functional components_ (từ phiên bản `React` 16.8) thay vì chỉ sử dụng các thành phần dựa _class components_.
 
-## Class components là gì?
+## Vậy Class components là gì?
 
 > _Class components_ là một trong hai kiểu chính của _component_ trong `React`, phối hợp với _functional components_. Được sử dụng rộng rãi trong phiên bản `React` trước khi _hooks_ được giới thiệu và trở thành một phần quan trọng của cách xây dựng ứng dụng `React`.
 
@@ -351,32 +351,32 @@ Trong ReactJS, có sự khác nhau quan trọng giữa props (properties) và st
   </thead>
   <tbody>
     <tr>
-      <th>Nguồn dữ liệu</th>
+      <td>Nguồn dữ liệu</td>
       <td>Truyền từ component cha xuống component con</td>
       <td>Dữ liệu nội bộ của component</td>
     </tr>
     <tr>
-      <th>Thay đổi giá trị</th>
+      <td>Thay đổi giá trị</td>
       <td>Không thể thay đổi giá trị props trong component con</td>
       <td>Có thể thay đổi giá trị state trong component</td>
     </tr>
     <tr>
-      <th>Được truyền qua</th>
+      <td>Được truyền qua</td>
       <td>Dùng thuộc tính trong JSX khi tạo instance</td>
       <td>Được khởi tạo trong constructor và quản lý bởi React</td>
     </tr>
     <tr>
-      <th>Cập nhật giá trị</th>
+      <td>Cập nhật giá trị</td>
       <td>Không thể cập nhật trực tiếp props</td>
       <td>Cập nhật bằng phương thức <code>setState()</code></td>
     </tr>
     <tr>
-      <th>Gây ra re-render</th>
+      <td>Gây ra re-render</td>
       <td>Thay đổi props gây re-render component</td>
       <td>Thay đổi state gây re-render component</td>
     </tr>
     <tr>
-      <th>Sử dụng chính</th>
+      <td>Sử dụng chính</td>
       <td>Truyền dữ liệu và hành vi từ component cha</td>
       <td>Quản lý dữ liệu và trạng thái nội bộ của component</td>
     </tr>
@@ -444,3 +444,68 @@ export default MyComponent;
 - JSX là một phần mở rộng cú pháp tệp được sử dụng bởi React, bạn có thể kết xuất thành phần, nhập tệp CSS và sử dụng các móc React trong số những thứ khác. Bạn nên sử dụng tệp JSX khi hiển thị một thành phần React.
 
 > Sử dụng cú pháp JSX trong một tệp tin JavaScript (.js), React vẫn có thể chạy được mã nguồn của bạn nếu bạn đã cấu hình môi trường phù hợp. Tuy nhiên, mặc dù React có thể chạy mã JSX trong tệp tin JavaScript thông thường, việc sử dụng phần mở rộng tệp tin .jsx được khuyến nghị để làm rõ rằng tệp tin đó chứa mã nguồn sử dụng cú pháp JSX. Việc sử dụng phần mở rộng .jsx giúp cho việc đọc, hiểu và duy trì mã nguồn dễ dàng hơn, đặc biệt khi bạn có nhiều tệp tin trong dự án React của mình.
+
+## Vậy Function components là gì?
+
+> **Function component** là một loại thành phần trong `React` được viết dưới dạng một hàm `JavaScript`. Đây là một cách phổ biến để tạo các thành phần trong `React`. Nó được định nghĩa bằng cách sử dụng một hàm `JavaScript`, và hàm này trả về một phần tử `React` hoặc một cây phần tử `React`. Hàm này có thể nhận vào một đối số (thường được gọi là `props`) để truyền dữ liệu và cấu hình cho thành phần.
+
+Ví dụ:
+
+```js
+import React from 'react';
+
+function Greeting(props) {
+  return <h1>Hello, {props.name}!</h1>;
+}
+
+export default Greeting;
+```
+
+Một số đặc điểm nổi bật trong Function component:
+
+- Hàm `render()`: Trong một _function component_, hàm render không cần được khai báo một cách rõ ràng như trong _class component_. Thay vào đó, _function component_ trực tiếp trả về phần tử `React` hoặc cây phần tử `React` từ hàm chính của nó.
+
+- Không có **State**: Trong quá khứ, _function component_ không có khả năng lưu trữ trạng thái nội bộ (state). Tuy nhiên, kể từ phiên bản **React 16.8**, `React` đã giới thiệu `React Hooks`, cho phép chúng ta sử dụng _state_ và các tính năng khác của `React` trong _function component_ bằng cách sử dụng hook như useState, useContext,... (Chúng ta tìm hiểu về các hooks này ở phần sau).
+
+- Không có **Lifecycle Methods**: _Function component_ không có các phương thức _lifecycle_ như `componentDidMount()`, `componentDidUpdate()`, `componentWillUnmount()`,... Thay vào đó, chúng ta có thể sử dụng hook `useEffect` để thực hiện các tác vụ tương đương với _lifecycle_ trong _function component_.
+
+- Tính Dễ Đọc và Đơn Giản: _Function component_ thường có cú pháp ngắn gọn hơn so với _class component_. Việc sử dụng _function component_ giúp mã nguồn dễ đọc và dễ hiểu hơn.
+
+- Tương Thích Với `React Hooks`: _Function component_ là cách chính thức để sử dụng `React Hooks`. Hooks chỉ có thể được sử dụng trong _function component_, không thể sử dụng trong _class component_.
+
+<table>
+  <thead>
+    <tr>
+      <th>Thuộc tính</th>
+      <th>Function Component</th>
+      <th>Class Component</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Cú pháp</td>
+      <td>Được viết dưới dạng function JavaScript.</td>
+      <td>Được viết dưới dạng class JavaScript.</td>
+    </tr>
+    <tr>
+      <td>State</td>
+      <td>Trước React 16.8, không hỗ trợ lưu trữ state.</td>
+      <td>Có thể sử dụng state thông qua this.state.</td>
+    </tr>
+    <tr>
+      <td>Lifecycle Methods</td>
+      <td>Sử dụng hook useEffect để thực hiện các tác vụ tương đương với lifecycle.</td>
+      <td>Có các phương thức lifecycle như componentDidMount, componentDidUpdate, componentWillUnmount, v.v.</td>
+    </tr>
+    <tr>
+      <td>React Hooks</td>
+      <td>Hỗ trợ sử dụng React Hooks.</td>
+      <td>Không hỗ trợ sử dụng React Hooks.</td>
+    </tr>
+    <tr>
+      <td>Độ dễ đọc</td>
+      <td>Dễ đọc và hiểu hơn.</td>
+      <td>Phức tạp hơn và khó hiểu hơn.</td>
+    </tr>
+  </tbody>
+</table>
