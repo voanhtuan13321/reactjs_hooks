@@ -53,7 +53,7 @@ function App() {
       {/* <UseMemo /> */}
 
       {/* demo custom hook */}
-      <CustomHook />
+      {/* <CustomHook /> */}
     </>
   );
 }

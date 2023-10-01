@@ -1460,3 +1460,156 @@ Trong ví dụ trên, chúng ta đã tạo một custom hook **useWindowSize** s
 - Sử dụng custom hook khi bạn muốn tạo ra một tập hợp các hàm hooks có tên có ý nghĩa, giúp mã trở nên dễ đọc và dễ hiểu hơn.
 
 ### Redux?
+
+> **Redux** là một thư viện quản lý trạng thái (state management) cho ứng dụng web JavaScript. Nó được sử dụng rộng rãi trong các ứng dụng `React`, nhưng cũng có thể được sử dụng với các framework JavaScript khác hoặc thậm chí không dùng framework nào.
+>
+> **Redux** giúp bạn quản lý trạng thái ứng dụng một cách dễ dàng và dự đoán được. Nó áp dụng các nguyên tắc từ kiến trúc Flux, với một luồng dữ liệu một chiều, giúp đơn giản hóa việc theo dõi và cập nhật trạng thái của ứng dụng.
+
+Các khái niệm chính trong **Redux** bao gồm:
+
+- **Store**: Là nơi lưu trữ toàn bộ trạng thái của ứng dụng. Store là một object bao gồm các phương thức để truy cập và cập nhật trạng thái.
+
+- **Actions**: Là các đối tượng JavaScript mô tả một sự kiện xảy ra trong ứng dụng. Mỗi action có một thuộc tính type để chỉ định loại action và các thuộc tính khác để mang thông tin liên quan.
+
+- **Reducers**: Là các hàm xử lý nhận vào trạng thái hiện tại và action, và trả về trạng thái mới dựa trên action đó. Reducers xác định cách thức cập nhật trạng thái trong **Redux**.
+
+- **Dispatch**: Là phương thức của store, cho phép gửi action tới store để cập nhật trạng thái. Khi một action được dispatch, **Redux** sẽ gọi các reducers tương ứng để xác định trạng thái mới.
+
+- **Subscribe**: Là phương thức của store, cho phép đăng ký các hàm lắng nghe (listener) để theo dõi sự thay đổi trạng thái trong store. Khi trạng thái thay đổi, các hàm lắng nghe sẽ được gọi.
+
+![Alt text](/images/Redux.gif)
+
+Cách sử dụng redux:
+
+1. Cài đặt package để sử dụng:
+
+   ```js
+     npm install redux react-redux
+   ```
+
+1. Định nghĩa Reducer:
+
+   ```js
+   // counterReducer.js
+   const initialState = {
+     count: 0,
+   };
+
+   const counterReducer = (state = initialState, action) => {
+     switch (action.type) {
+       case 'INCREMENT':
+         return {
+           count: state.count + 1,
+         };
+       case 'DECREMENT':
+         return {
+           count: state.count - 1,
+         };
+       default:
+         return state;
+     }
+   };
+
+   export default counterReducer;
+   ```
+
+1. Định nghĩa store và kết nối với reducer:
+
+   ```js
+   // store.js
+   import { createStore } from 'redux';
+   import counterReducer from './counterReducer';
+
+   const store = createStore(counterReducer);
+
+   export default store;
+   ```
+
+1. Tạo component Counter.js để hiển thị số lần nhấn nút và kết nối với store:
+
+   ```js
+   // Counter.js
+   import React from 'react';
+   import { useSelector, useDispatch } from 'react-redux';
+
+   const Counter = () => {
+     const count = useSelector((state) => state.count); // lấy giá trị từ store bên trong redux
+     const dispatch = useDispatch();
+
+     useEffect(() => {
+       // Subscribe để theo dõi sự thay đổi của trạng thái
+       const unsubscribe = store.subscribe(() => {
+         // Lấy giá trị mới của count sau mỗi thay đổi
+         const newCount = store.getState().count;
+         console.log('New count:', newCount);
+       });
+
+       // Hủy subscribe khi unmount component
+       return () => {
+         unsubscribe();
+       };
+     }, []);
+
+     const increment = () => {
+       dispatch({ type: 'INCREMENT' });
+     };
+
+     const decrement = () => {
+       dispatch({ type: 'DECREMENT' });
+     };
+
+     return (
+       <div>
+         <p>Count: {count}</p>
+         <button onClick={increment}>Increment</button>
+         <button onClick={decrement}>Decrement</button>
+       </div>
+     );
+   };
+
+   export default Counter;
+   ```
+
+1. Trong file App.js, sử dụng component Counter và cung cấp store thông qua Provider từ react-redux:
+
+   ```js
+   // App.js
+   import React from 'react';
+   import { Provider } from 'react-redux';
+   import Counter from './Counter';
+   import store from './store';
+
+   const App = () => {
+     return (
+       <Provider store={store}>
+         <Counter />
+       </Provider>
+     );
+   };
+
+   export default App;
+   ```
+
+**Ưu điểm:**
+
+- Quản lý trạng thái tập trung: Redux giúp tập trung quản lý trạng thái ứng dụng trong một store duy nhất. Điều này giúp dễ dàng theo dõi và debug trạng thái ứng dụng.
+
+- Trạng thái dự đoán được: Redux sử dụng một luồng dữ liệu một chiều (one-way data flow) và các reducer không thay đổi trạng thái mà tạo ra các trạng thái mới. Điều này giúp dễ dàng dự đoán các thay đổi trạng thái và giúp kiểm tra và tái sử dụng code dễ dàng hơn.
+
+- Hỗ trợ cho ứng dụng lớn: Redux có khả năng quản lý trạng thái phức tạp của các ứng dụng lớn và phân tách logic xử lý trạng thái (reducers) và logic xử lý hành động (actions).
+
+- Đa nền tảng: Redux không phụ thuộc vào bất kỳ framework nào cụ thể và có thể được sử dụng trong nhiều dự án JavaScript, bao gồm React, Angular, Vue và cả ứng dụng Node.js.
+
+**Nhược điểm:**
+
+- Cú pháp phức tạp: Redux yêu cầu viết nhiều mã để định nghĩa reducers, actions và các thành phần khác. Điều này có thể gây khó khăn và làm tăng độ phức tạp của mã nguồn.
+
+**Khi nào sử dụng:**
+
+- Sử dụng Redux khi ứng dụng có trạng thái phức tạp, có nhiều thành phần chia sẻ trạng thái hoặc cần quản lý trạng thái toàn cục.
+
+- Sử dụng Redux khi bạn cần theo dõi lịch sử trạng thái, hoặc cần thực hiện các hành động như log trạng thái hoặc hoàn tác/hồi phục.
+
+- Sử dụng Redux khi bạn muốn tách biệt logic xử lý trạng thái và logic xử lý hành động để dễ dàng kiểm tra và tái sử dụng code.
+
+## THE END.
