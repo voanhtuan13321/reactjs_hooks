@@ -598,9 +598,9 @@ class MyComponent extends Component {
     };
   }
 
-  incrementCount() {
+  incrementCount = () => {
     this.setState({ count: this.state.count + 1 });
-  }
+  };
 
   render() {
     return (
@@ -698,13 +698,13 @@ class MyComponent extends Component {
     };
   }
 
-  increment() {
+  increment = () => {
     this.setState({ count: this.state.count + 1 });
-  }
+  };
 
-  decrement() {
+  decrement = () => {
     this.setState({ count: this.state.count - 1 });
-  }
+  };
 
   render() {
     return (
@@ -1066,7 +1066,7 @@ Ví dụ:
 
     return (
       <div>
-        <p>Count: {count}</p>
+        <p>Count: {count.curent}</p>
         <button onClick={increment}>Increment</button>
       </div>
     );
