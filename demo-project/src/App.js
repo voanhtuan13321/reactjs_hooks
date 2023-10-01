@@ -1,3 +1,5 @@
+import { Provider } from 'react-redux';
+
 import CustomHook from './components/demoCustomHook/CustomHook';
 import Mounting from './components/demoLifeMounting/Mounting';
 import UnMounting from './components/demoLifeUnmounting/UnMounting';
@@ -11,6 +13,8 @@ import UseMemo from './components/demoUseMemo/UseMemo';
 import UseReducer from './components/demoUseReducer/UseReducer';
 import UseRef from './components/demoUseRef/UseRef';
 import UseState from './components/demoUseState/UseState';
+import store from './components/demoRedux/store';
+import Counter from './components/demoRedux/Counter';
 
 function App() {
   return (
@@ -54,6 +58,11 @@ function App() {
 
       {/* demo custom hook */}
       {/* <CustomHook /> */}
+
+      {/* demo redux */}
+      <Provider store={store}>
+        <Counter />
+      </Provider>
     </>
   );
 }
