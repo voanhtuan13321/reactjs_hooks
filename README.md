@@ -18,6 +18,7 @@
      - [context provider là gì?](#context-provider-là-gì)
    - [useRef hook](#useref-hook)
    - [useCallback hook](#usecallback-hook)
+   - [useMemo hook](#usememo-hook)
 
 ## Hooks là gì?
 
@@ -40,7 +41,7 @@ Ví dụ:
 ```js
 import `React` from 'react';
 
-class Welcome extends React._Component_ {
+class Welcome extends React.Component {
   render() {
     return <h1>Hello, React!</h1>;
   }
@@ -81,7 +82,7 @@ ví dụ:
 ```js
 import `React` from 'react';
 
-class Counter extends React._Component_ {
+class Counter extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -139,7 +140,7 @@ Có 3 giai đoạn chính:
   ```js
   import React from 'react';
 
-  class ExampleComponent extends React._Component_ {
+  class ExampleComponent extends React.Component {
     constructor(props) {
       super(props);
       console.log('Constructor is called');
@@ -530,6 +531,14 @@ Một số đặc điểm nổi bật trong Function component:
 </table>
 
 ### Hooks trong React?
+
+Một số lưu ý khi sử dụng hook:
+
+1. Chỉ sử dụng hooks trong các functional component.
+
+1. Hooks phải được sử dụng trên cùng mức của component: Bạn không thể sử dụng hooks bên trong các điều kiện (if statements) hoặc vòng lặp (loops). Hooks phải được sử dụng ở cùng mức của component trong mỗi lần render (không dùng hook lồng bên trong hook).
+
+1. Không thay đổi giá trị trực tiếp của state: Khi làm việc với state, không nên thay đổi giá trị state trực tiếp. Thay vào đó, hãy sử dụng các hàm setState hoặc các hàm reducer để thay đổi giá trị state một cách an toàn.
 
 Dưới đây là một số hooks phổ biến trong React:
 
@@ -1293,3 +1302,63 @@ Khi count thay đổi, hàm callback được tái tạo với giá trị count 
 - Sử dụng useCallback khi bạn cần truyền một hàm callback vào các component con hoặc hooks khác. useCallback đảm bảo rằng các hàm callback không thay đổi khi không cần thiết, giúp tránh việc tái render không cần thiết của các component con.
 
 - Sử dụng useCallback khi bạn muốn tối ưu hiệu suất của các component bằng cách memoize các hàm callback. Điều này đặc biệt hữu ích khi các hàm callback được sử dụng trong các kịch bản tái render nhiều lần.
+
+#### useMemo hook?
+
+> **useMemo** là một hook trong `React` được sử dụng để memoize (lưu trữ) giá trị tính toán và trả về giá trị đã memoize đó.
+>
+> Nó giúp tối ưu hiệu suất của ứng dụng bằng cách tránh tính toán lại giá trị trong các trường hợp không cần thiết.
+>
+> useMemo con được sử dụng để giảm việc re-render của component con.
+
+Cú pháp sử dụng lưu trữ giá trị tính toán:
+
+```js
+const memoizedValue = useMemo(() => {
+  computeExpensiveValue(a, b);
+}, [a, b]);
+```
+
+Trong đó:
+
+- `computeExpensiveValue()` là một hàm tính toán giá trị mà bạn muốn memoize.
+
+- `[a, b]` là một mảng dependency (dependency array) chứa các giá trị mà `computeExpensiveValue()` phụ thuộc vào. Khi các giá trị trong dependency array thay đổi, `computeExpensiveValue()` sẽ được gọi lại để tính toán giá trị mới.
+
+**useMemo** sẽ thực hiện tính toán giá trị của `computeExpensiveValue()` một lần duy nhất khi _component_ được render lần đầu tiên hoặc khi các giá trị trong dependency array thay đổi. Giá trị tính toán sẽ được lưu trữ và trả về từ lần render tiếp theo trở đi, trừ khi các dependency thay đổi.
+
+Ví dụ:
+
+```js
+import React, { useState, useMemo } from 'react';
+
+function MyComponent() {
+  const [count, setCount] = useState(0);
+
+  // Tính toán giá trị bình phương của count
+  const squaredValue = useMemo(() => {
+    console.log('Computing squared value...');
+    return count ** 2;
+  }, [count]);
+
+  return (
+    <div>
+      <p>Count: {count}</p>
+      <p>Squared Value: {squaredValue}</p>
+      <button onClick={() => setCount(count + 1)}>Increment</button>
+    </div>
+  );
+}
+```
+
+Trong ví dụ này, chúng ta có một component `MyComponent` với một biến state _count_ và một giá trị tính toán _squaredValue_.
+
+Bằng cách sử dụng **useMemo**, chúng ta memoize giá trị tính toán của _squaredValue_ dựa trên _count_. Dependency array [_count_] được truyền vào **useMemo** để nói cho React biết rằng _squaredValue_ phụ thuộc vào giá trị _count_. Khi _count_ thay đổi, **useMemo** sẽ gọi lại hàm callback và tính toán giá trị bình phương mới.
+
+Khi component được render lần đầu tiên, hàm callback của **useMemo** sẽ được gọi để tính toán giá trị bình phương của _count_. Kết quả tính toán sẽ được lưu trữ trong _squaredValue_ và hiển thị trên giao diện.
+
+Khi bạn click vào nút "Increment" để tăng giá trị _count_, setCount sẽ được gọi để cập nhật giá trị _count_ và làm cho component MyComponent tái render. Tuy nhiên, nhờ sử dụng **useMemo**, giá trị bình phương đã được tính toán trước đó sẽ được lưu trữ và không cần tính toán lại. Điều này giúp tránh tính toán không cần thiết và tối ưu hiệu suất của ứng dụng.
+
+Trên console, bạn sẽ thấy thông báo "Computing squared value..." chỉ được hiển thị khi giá trị _count_ thay đổi và **useMemo** tính toán lại giá trị bình phương. Trong các lần render tiếp theo, thông báo này sẽ không xuất hiện khi giá trị đã được memoize.
+
+**Ngăn re-render component con**
