@@ -19,8 +19,8 @@
    - [useRef hook](#useref-hook)
    - [useCallback hook](#usecallback-hook)
    - [useMemo hook](#usememo-hook)
-   - custom hooks
-1. Redux
+   - [custom hook](#custom-hook)
+1. [Redux](#redux)
 
 ## Hooks là gì?
 
@@ -1310,14 +1310,12 @@ Khi count thay đổi, hàm callback được tái tạo với giá trị count 
 > **useMemo** là một hook trong `React` được sử dụng để memoize (lưu trữ) giá trị tính toán và trả về giá trị đã memoize đó.
 >
 > Nó giúp tối ưu hiệu suất của ứng dụng bằng cách tránh tính toán lại giá trị trong các trường hợp không cần thiết.
->
-> useMemo con được sử dụng để giảm việc re-render của component con.
 
 Cú pháp sử dụng lưu trữ giá trị tính toán:
 
 ```js
 const memoizedValue = useMemo(() => {
-  computeExpensiveValue(a, b);
+  return computeExpensiveValue(a, b);
 }, [a, b]);
 ```
 
@@ -1363,4 +1361,102 @@ Khi bạn click vào nút "Increment" để tăng giá trị _count_, setCount s
 
 Trên console, bạn sẽ thấy thông báo "Computing squared value..." chỉ được hiển thị khi giá trị _count_ thay đổi và **useMemo** tính toán lại giá trị bình phương. Trong các lần render tiếp theo, thông báo này sẽ không xuất hiện khi giá trị đã được memoize.
 
-**Ngăn re-render component con**
+**Ưu điểm:**
+
+- Tối ưu hiệu suất: useMemo giúp tránh tính toán không cần thiết và render lại không cần thiết trong React. Nó memoizes giá trị tính toán và chỉ tính toán lại khi các dependency thay đổi, giúp cải thiện hiệu suất của ứng dụng.
+
+- Tái sử dụng giá trị tính toán: Khi sử dụng useMemo, bạn có thể lưu trữ và tái sử dụng các giá trị tính toán, giúp tránh việc tính toán lại các giá trị trong các lần render tiếp theo.
+
+**Nhược điểm:**
+
+- Gây thêm độ phức tạp cho mã: Một số trường hợp sử dụng useMemo có thể làm mã trở nên phức tạp hơn do phải quản lý các dependencies và giá trị tính toán. Nếu không cẩn thận, có thể dẫn đến mã khó hiểu và khó bảo trì.
+
+- Sử dụng bộ nhớ bổ sung: giống useCallback, sử dụng bộ nhớ bổ sung để lưu trữ các phiên bản memoized.
+
+**Khi nào thì sử dụng:**
+
+- Sử dụng useMemo khi bạn có một giá trị tính toán phức tạp hoặc tốn nhiều thời gian, và bạn muốn tránh việc tính toán lại trong mỗi lần render không cần thiết.
+
+#### Custom hook?
+
+> **Custom hook** là một khái niệm trong `React` cho phép bạn tái sử dụng logic state và side effects (hiệu ứng phụ) giữa các _component_ khác nhau. Nó cho phép bạn tạo ra một tập hợp các hàm hooks và logic tương ứng, và sau đó sử dụng các hàm này trong nhiều _component_ khác nhau.
+>
+> **Custom hook** thường được tạo bằng cách sử dụng các hooks có sẵn (như _useState_, _useEffect_, _useContext_, v.v.) và kết hợp chúng với logic do bạn định nghĩa.
+
+Ví dụ, dưới đây là một custom hook đơn giản để theo dõi kích thước của cửa sổ trình duyệt:
+
+```js
+import { useState, useEffect } from 'react';
+
+function useWindowSize() {
+  const [windowSize, setWindowSize] = useState({
+    width: window.innerWidth,
+    height: window.innerHeight,
+  });
+
+  useEffect(() => {
+    const handleResize = () => {
+      const newSize = {
+        width: window.innerWidth,
+        height: window.innerHeight,
+      };
+      setWindowSize(newSize);
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  return windowSize;
+}
+```
+
+Sử dụng custom hook đã tạo:
+
+```js
+import React from 'react';
+import { useWindowSize } from './useWindowSize';
+
+function WindowSizeComponent() {
+  const windowSize = useWindowSize();
+
+  return (
+    <div>
+      <h1>Window Size</h1>
+      <p>Width: {windowSize.width}px</p>
+      <p>Height: {windowSize.height}px</p>
+    </div>
+  );
+}
+
+export default WindowSizeComponent;
+```
+
+Trong ví dụ trên, chúng ta đã tạo một custom hook **useWindowSize** sử dụng _useState_ và _useEffect_. Nó giữ kích thước cửa sổ trình duyệt và cập nhật nó mỗi khi cửa sổ được thay đổi. Khi sử dụng custom hook này trong một component, chúng ta có thể nhận được kích thước cửa sổ thông qua windowSize và tự động cập nhật khi kích thước thay đổi.
+
+**Ưu điểm:**
+
+- Tái sử dụng logic: Custom hook cho phép bạn tạo ra một tập hợp các hàm hooks và logic tương ứng, giúp tái sử dụng logic state và side effects giữa các component khác nhau. Điều này giúp tránh việc viết lại mã logic và giữ mã dễ bảo trì và mở rộng.
+
+- Tách biệt logic: Custom hook giúp tách biệt logic khỏi UI. Bằng cách đóng gói logic vào custom hook, bạn có thể tập trung vào việc xây dựng giao diện người dùng mà không phải quan tâm đến chi tiết cài đặt của logic.
+
+- Cải thiện đọc mã: Bằng cách sử dụng custom hook, bạn có thể tạo ra các hàm hooks có tên có ý nghĩa và tái sử dụng chúng trong nhiều component khác nhau. Điều này giúp mã trở nên dễ đọc, dễ hiểu và dễ duy trì.
+
+**Nhược điểm:**
+
+- Khó định vị lỗi: Khi sử dụng custom hook, việc định vị và gỡ lỗi lỗi có thể trở nên phức tạp hơn. Vì nó tái sử dụng logic giữa nhiều component, lỗi có thể xuất hiện ở nhiều nơi và khó tìm ra nguyên nhân chính xác.
+
+- Mơ hồ về nguyên tắc: Custom hook không có nguyên tắc nghiêm ngặt và có thể dẫn đến việc sử dụng không đúng cách.
+
+**Khi nào sử dụng:**
+
+- Sử dụng custom hook khi bạn cần tái sử dụng logic state và side effects giữa nhiều component khác nhau.
+
+- Sử dụng custom hook khi bạn muốn tách biệt logic khỏi giao diện người dùng và giữ mã dễ bảo trì và mở rộng.
+
+- Sử dụng custom hook khi bạn muốn tạo ra một tập hợp các hàm hooks có tên có ý nghĩa, giúp mã trở nên dễ đọc và dễ hiểu hơn.
+
+### Redux?

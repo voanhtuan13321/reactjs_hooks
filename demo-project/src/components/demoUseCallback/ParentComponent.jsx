@@ -7,9 +7,14 @@ export default function ParentComponent() {
   const [count, setCount] = useState(0);
 
   const handleClick = useCallback(() => {
-    console.log('callback:', count);
+    console.log('callback: ', count);
     setCount(count + 1);
-  }, [count]);
+  }, []);
+
+  // const handleClick = useCallback(() => {
+  //   console.log('callback: ', count);
+  //   setCount(count + 1);
+  // }, [count]);
 
   return (
     <div>
