@@ -19,6 +19,8 @@
    - [useRef hook](#useref-hook)
    - [useCallback hook](#usecallback-hook)
    - [useMemo hook](#usememo-hook)
+   - custom hooks
+1. Redux
 
 ## Hooks là gì?
 
